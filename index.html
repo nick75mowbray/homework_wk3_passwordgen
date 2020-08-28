@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Password Generator</h1>
+        <div class="text">
+            <p></p>
+        </div>
+        <button onclick="genPassword()">Generate Password</button>
+    </div>
+
+
+    <script>
+        //declare variables
+        var newPassword = "";
+        var passLength = 0;
+        var passLower = false;
+        var passUpper = false;
+        var passNum = false;
+        var passSpec = false;
+
+
+//function to prompt for passord length
+function getPassLength(){
+    lengthEntered = prompt("enter password length, choose a number between 8 and 128: ");
+    return lengthEntered;
+};
+//function for finding if password should include lowercase
+function getPassLower(){
+            lower = confirm("do you want to include lowercase letters?");
+            return lower;
+};
+//function for finding if password should include uppercase
+function getPassUpper(){
+            upper = confirm("do you want to include uppercase letters?");
+            return upper;
+};
+//function for finding if password should include numbers
+function getPassNum(){
+            mynum = confirm("do you want to include numbers?");
+            return mynum;
+};
+//function for finding if password should include special characters
+function getPassChar(){
+            special = confirm("do you want to include special characters?");
+            return special;
+}
+//generate password, runs when button clicked
+        function genPassword(){
+            //user enters password length
+            passLength = getPassLength();
+            //check the password length is valid
+            if (passLength < 8 || passLength > 128){
+                alert("please enter a valid number");
+                passLength = getPassLength();
+            };
+            alert("Choose which characters do you want to include in your password: ")
+            passLower = getPassLower();
+            passUpper = getPassUpper();
+            passNum = getPassNum();
+            passSpec = getPassChar();
+            //check if character types are valid
+            if (!passLower && !passUpper && !passNum && !passSpec){
+                passLower = getPassLower();
+                passUpper = getPassUpper();
+                passNum = getPassNum();
+                passSpec = getPassChar();
+            };
+            //generate password
+            for (var i = 0; i < passLength; i++){
+                var thing = Math.floor(Math.random()*26);
+                newPassword = newPassword + thing;
+            };
+        }
+    </script>
+</body>
+</html>
