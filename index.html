@@ -23,32 +23,55 @@
         var passUpper = false;
         var passNum = false;
         var passSpec = false;
+        var funcArray = [];
 
 
-//function to prompt for passord length
+//functions to enter prompts for password
 function getPassLength(){
     lengthEntered = prompt("enter password length, choose a number between 8 and 128: ");
     return lengthEntered;
 };
-//function for finding if password should include lowercase
 function getPassLower(){
             lower = confirm("do you want to include lowercase letters?");
             return lower;
 };
-//function for finding if password should include uppercase
 function getPassUpper(){
             upper = confirm("do you want to include uppercase letters?");
             return upper;
 };
-//function for finding if password should include numbers
 function getPassNum(){
             mynum = confirm("do you want to include numbers?");
             return mynum;
 };
-//function for finding if password should include special characters
 function getPassChar(){
             special = confirm("do you want to include special characters?");
             return special;
+}
+//functions to get random character of selected type
+function genRandNum() {
+  var min = Math.ceil(48);
+  var max = Math.floor(57);
+  return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is exclusive and the minimum is inclusive
+};
+function genRandSpecial() {
+  var min = Math.ceil(33);
+  var max = Math.floor(47);
+  return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is exclusive and the minimum is inclusive
+};
+function genRandUpper() {
+  var min = Math.ceil(65);
+  var max = Math.floor(90);
+  return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is exclusive and the minimum is inclusive
+};
+function genRandLower() {
+  var min = Math.ceil(97);
+  var max = Math.floor(122);
+  return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is exclusive and the minimum is inclusive
+};
+//function to convert ascii number to ascii character
+function convertToString(number){
+    result = String.fromCharCode(number);
+    return result;
 }
 //generate password, runs when button clicked
         function genPassword(){
@@ -64,13 +87,37 @@ function getPassChar(){
             passUpper = getPassUpper();
             passNum = getPassNum();
             passSpec = getPassChar();
-            //check if character types are valid
+            //check if user selected any character types
             if (!passLower && !passUpper && !passNum && !passSpec){
-                passLower = getPassLower();
-                passUpper = getPassUpper();
-                passNum = getPassNum();
-                passSpec = getPassChar();
+                alert("please select at least one character type")
+                break;
             };
+            //add functions for random selection of character types to array
+            if (passLower){
+                funcArray.push(genRandLower());
+            } else if (passNum){
+                funcArray.push(genRandNum());
+            } else if (passSpec){
+                funcArray.push(genRandSpecial());
+            } else if (passUpper){
+                funcArray.push(genRandUpper());
+            }
+            //calculate the number of types selected
+            var typeCount = 0;
+            if (passLower){
+                typeCount++;
+            } else if (passNum){
+                typeCount++;
+            } else if (passUpper){
+                typeCount++;
+            } else if (passSpec){
+                typeCount++;
+            }
+            //randomly select type and randomly select character within that type
+            for (var i = 0; i < passLength - typeCount; i++){
+                var randomArrayIndex = Math.floor(Math.random() * i);
+                newPassword = newPassword + funcArray[i];
+            }
             //generate password
             for (var i = 0; i < passLength; i++){
                 var thing = Math.floor(Math.random()*26);
