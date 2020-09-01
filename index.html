@@ -9,9 +9,6 @@
 <body>
     <div class="container">
         <h1>Password Generator</h1>
-        <h4 id="password-will-contain">Your password will contain: </h4>
-        <input id="checkbox-lowercase" type="checkbox" checked="false" value="false" name="lowercase">
-            <label for="lowercase">lowercase letters</label>
         <div class="text">
             <h5 id="password-is" style="display: none;">Your new password is:</h5>
             <p id="password-output"></p>
@@ -51,7 +48,7 @@ function getPassChar(){
             special = confirm("do you want to include special characters?");
             return special;
 }
-//functions to get random character of selected type
+//functions to get random character of selected type using ascii character numbers
 function genRandNum() {
   var min = Math.ceil(48);
   var max = Math.floor(57);
@@ -76,139 +73,129 @@ function genRandLower() {
 function convertToString(number){
     result = String.fromCharCode(number);
     return result;
-}
+};
+//function for user to select character types
+function getTypes(){
+    passLower = getPassLower();
+    passUpper = getPassUpper();
+    passNum = getPassNum();
+    passSpec = getPassChar();
+};
+// function to randomly select character type to add to password and randomly select a character of that type
+    function randomCharGenerator(passwordLength){
+        for (var i = 0; i < passwordLength; i++){
+                var randomArrayIndex = 0;
+                randomArrayIndex = Math.floor(Math.random() * 3);
+                if (randomArrayIndex === 0 && passNum === true){
+                    newPassword = newPassword + convertToString(genRandNum());
+                } else if (randomArrayIndex === 1 && passLower === true){
+                    newPassword = newPassword + convertToString(genRandLower());
+                } else if (randomArrayIndex === 2 && passUpper === true){
+                    newPassword = newPassword + convertToString(genRandUpper());
+                } else if (randomArrayIndex === 3 && passSpec === true){
+                    newPassword = newPassword + convertToString(genRandSpecial());
+                    //if randomArrayIndex randomly selects a type that isnt selected run loop again
+                } else if ((randomArrayIndex === 0 && passNum !== true) || (randomArrayIndex === 1 && passLower !== true) || (randomArrayIndex === 2 && passUpper !== true) || (randomArrayIndex === 3 && passSpec !== true)){
+                        i--;
+                } 
+            }
+    }
 //generate password, runs when button clicked
         function genPassword(){
-            //variable to check if password contains character type
+            // reset variables
+            newPassword = "";
+            passLength = 0;
+            passLower = false;
+            passUpper = false;
+            passNum = false;
+            passSpec = false;
+            typeCount = 0;
+            //variables to check if password contains character type
             var containsNumber = false;
             var containsSpecial = false;
             var containsLower = false;
             var containsUpper = false;
+            // variables to confirm the users input is valid
+            var lengthInvalid = false;
+            var charsInvalid = false;
+
             //user enters password length
-            passLength = getPassLength();
-            //check the password length is valid
-            if (passLength < 8 || passLength > 128){
-                alert("please enter a valid number");
-                passLength = getPassLength();
+            //will loop until password length is valid
+            while (passLength < 8 || passLength > 128){
+                //this will only run once
+                if (!lengthInvalid){
+                    passLength = getPassLength();
+                };
+                // this will run if user enters a invalid length
+                if (passLength < 8 || passLength > 128){
+                    alert("please enter a valid number between 8 and 128");
+                    passLength = getPassLength();
+                    lengthInvalid = true;
+                };
             };
-            alert("Choose which characters do you want to include in your password: ")
-            passLower = getPassLower();
-            console.log("lower" + passLower)
-            passUpper = getPassUpper();
-            console.log("upper" + passUpper)
-            passNum = getPassNum();
-            console.log("number" + passNum)
-            passSpec = getPassChar();
-            console.log("special" + passSpec);
-            //check if user selected any character types
-            if (!passLower && !passUpper && !passNum && !passSpec){
-                alert("please select at least one character type");
+
+            //user selects character types
+            //runs until one character type is selected
+            while (passLower===false && passUpper===false && passNum===false && passSpec===false){
+                //run function to get types
+                if (!charsInvalid){
+                    getTypes();
+                };
+                //if user doesn't select any character types
+                if (passLower===false && passUpper===false && passNum===false && passSpec===false){
+                    alert("please select at least 1 character type");
+                    getTypes();
+                    charsInvalid = true;
+                };
             };
+                
             //calculate the number of types selected
-            
-            console.log(typeCount);
             if (passLower){
                 typeCount++;
-                console.log(typeCount);
             } if (passNum){
                 typeCount++;
-                console.log(typeCount);
             } if (passUpper){
                 typeCount++;
             } if (passSpec){
                 typeCount++;
-                console.log(typeCount);
             }
             
             //randomly select type and randomly select character within that type
-            
-            for (var i = 0; i < passLength - typeCount; i++){
-                var randomArrayIndex = 0;
-                console.log("i start" + i);
-                randomArrayIndex = Math.floor(Math.random() * 3);
-                if (randomArrayIndex === 0 && passNum === true){
-                    newPassword = newPassword + convertToString(genRandNum());
-                    console.log(newPassword);
-                } else if (randomArrayIndex === 1 && passLower === true){
-                    newPassword = newPassword + convertToString(genRandLower());
-                    console.log(newPassword);
-                } else if (randomArrayIndex === 2 && passUpper === true){
-                    newPassword = newPassword + convertToString(genRandUpper());
-                    console.log(newPassword);
-                } else if (randomArrayIndex === 3 && passSpec === true){
-                    newPassword = newPassword + convertToString(genRandSpecial());
-                    console.log(newPassword);
-                    //if randomArrayIndex randomly selects a type that isnt selected run loop again
-                } else if ((randomArrayIndex === 0 && passNum !== true) || (randomArrayIndex === 1 && passLower !== true) || (randomArrayIndex === 2 && passUpper !== true) || (randomArrayIndex === 3 && passSpec !== true)){
-                        i--;
-                        console.log("negative i");
-                } 
-                console.log("password at the end of loop" + newPassword);
-                console.log("i end" + i);
-            }
+            // loop stops before the desired password length to make sure the generated password contains at 
+            // least one of each selected character type
+            randomCharGenerator(passLength - typeCount);
+
             // check all selected types are included in password
             for (var i = 0; i < newPassword.length; i ++){
                 //convert password string to number
                 var number = newPassword.charCodeAt(i);
-                console.log("number is " + number);
                 if (number <= 57 && number >= 48){
-                    console.log("contains numbers");
                     containsNumber = true;
                 } else if (number >= 33 && number <=47){
-                    console.log("containers special");
                     containsSpecial = true;
                 } else if (number >= 65 && number <=90){
-                    console.log("containers upper");
                     containsUpper = true;
                 } else if (number >= 97 && number <=122){
-                    console.log("containers lower");
                     containsLower = true;
                 } 
             }
+
             // insert any missing types
             if (containsNumber === false && passNum === true){
                 newPassword = newPassword + convertToString(genRandNum());
-                console.log("added missing number");
             } if (containsLower === false && passLower === true){
                 newPassword = newPassword + convertToString(genRandLower());
-                console.log("added missing lower");
             } if (containsUpper === false && passUpper === true){
                 newPassword = newPassword + convertToString(genRandUpper());
-                console.log("added missing upper");
             } if (containsSpecial === false && passSpec === true){
                 newPassword = newPassword + convertToString(genRandSpecial());
-                console.log("added missing special");
             }
             //calculate characters still needed
             var missingChars = passLength - newPassword.length;
-            console.log("missingChars = "+ missingChars);
-            //run character generator loop again
-            for (var i = 0; i < missingChars; i++){
-                var randomArrayIndex = 0;
-                console.log("i start" + i);
-                randomArrayIndex = Math.floor(Math.random() * 3);
-                if (randomArrayIndex === 0 && passNum === true){
-                    newPassword = newPassword + convertToString(genRandNum());
-                    console.log(newPassword);
-                } else if (randomArrayIndex === 1 && passLower === true){
-                    newPassword = newPassword + convertToString(genRandLower());
-                    console.log(newPassword);
-                } else if (randomArrayIndex === 2 && passUpper === true){
-                    newPassword = newPassword + convertToString(genRandUpper());
-                    console.log(newPassword);
-                } else if (randomArrayIndex === 3 && passSpec === true){
-                    newPassword = newPassword + convertToString(genRandSpecial());
-                    console.log(newPassword);
-                    //if randomArrayIndex randomly selects a type that isnt selected run loop again
-                } else if ((randomArrayIndex === 0 && passNum !== true) || (randomArrayIndex === 1 && passLower !== true) || (randomArrayIndex === 2 && passUpper !== true) || (randomArrayIndex === 3 && passSpec !== true)){
-                        i--;
-                        console.log("negative i");
-                } 
-                console.log("password at the end of loop" + newPassword);
-                console.log("i end" + i);
-            }
-            //generate password
-            console.log("final password is " + newPassword);
+            //run character generator loop again to fill in any missing digits
+            randomCharGenerator(missingChars);
+
+            //add password to html
             document.getElementById("password-is").style.display= "block";
             document.getElementById("password-output").innerHTML= newPassword;
         }
