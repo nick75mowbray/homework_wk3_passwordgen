@@ -4,16 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" href="style.css"/>
 </head>
 <body>
-    <div class="container">
-        <h1>Password Generator</h1>
-        <div class="text">
-            <h5 id="password-is" style="display: none;">Your new password is:</h5>
-            <p id="password-output"></p>
+    <div id="container" class="container text-center">
+        <div class="container-fluid">
+            <h1>Password Generator</h1>
         </div>
-        <button onclick="genPassword()">Generate Password</button>
+        <div class="container-fluid">
+            <div id="text" class="card">
+                <div class="card-body">
+                    <h5 id="password-is" style="display: none;">Your new password is:</h5>
+                    <p id="password-output"></p>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <button class="btn btn-danger" onclick="genPassword()">Generate Password</button>
+        </div>
     </div>
 
 

@@ -1,0 +1,9 @@
+#text {
+    height: 150px;
+    border: 1px dashed grey;
+    padding: 30px;
+    margin-bottom: 15px;
+}
+#container {
+    padding-top: 25px;
+}
