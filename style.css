@@ -7,3 +7,10 @@
 #container {
     padding-top: 25px;
 }
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #8fff80;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 255, 21, 0.774);
+}
