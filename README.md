@@ -14,4 +14,4 @@ I then randomised which function to run and checked that relevant type was selec
 This was repeated until the password was the desired length.\
 If the password did not contain any of the types selected by the user the function would run again until a password with all the selected types is generated.
 
-[checkout the final site](https://nick75mowbray.github.io/homework_wk3_passwordgen/)
+[checkout the final site](https://nick75mowbray.github.io/password_generator/)
